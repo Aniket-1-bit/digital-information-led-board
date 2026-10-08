@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Digital Airport Flight Information Display System (Smart FIDS) | DLD Project</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+  <!-- Airport FIDS Header -->
+  <header class="airport-header">
+    <div class="header-left">
+      <div class="airport-logo">✈️</div>
+      <div class="airport-title">
+        <h1>JAIPUR INTERNATIONAL AIRPORT</h1>
+        <h2>JAI • FLIGHT INFORMATION DISPLAY SYSTEM</h2>
+        <div class="sub-lab-tag">DIGITAL LOGIC DESIGN (DLD) LABORATORY PROJECT</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="live-clock-card">
+        <div class="live-date" id="liveDate">08 OCT 2026</div>
+        <div class="live-time" id="liveTime">10:24:32</div>
+        <div class="system-status">
+          <span class="status-indicator"></span> LIVE • SYSTEM ONLINE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs (Only 4 Tabs) -->
+  <nav class="fids-nav-tabs">
+    <button class="nav-tab active" data-tab="tab-flights">
+      ✈ LIVE FLIGHTS
+    </button>
+    <button class="nav-tab" data-tab="tab-schematic">
+      🔧 LOGIC SCHEMATIC
+    </button>
+    <button class="nav-tab" data-tab="tab-scope">
+      📊 SIGNAL MONITOR
+    </button>
+    <button class="nav-tab" data-tab="tab-controls">
+      ⚙️ CONTROL PANEL
+    </button>
+  </nav>
+
+  <!-- Main Viewport -->
+  <main class="fids-main">
+
+    <!-- Tab 1: Live Flights FIDS Display -->
+    <div id="tab-flights" class="fids-tab-content active">
+      
+      <!-- Search & Mode Filter Action Bar -->
+      <div class="fids-action-bar">
+        <div class="mode-filter-group">
+          <button class="filter-btn active" data-mode="0">ALL FLIGHTS</button>
+          <button class="filter-btn" data-mode="1">ARRIVALS</button>
+          <button class="filter-btn" data-mode="2">DEPARTURES</button>
+          <button class="filter-btn" data-mode="3">BOARDING</button>
+          <button class="filter-btn" data-mode="4">DELAYED</button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="flightSearchInput" placeholder="Search Flight No, Airline, City, Gate...">
+        </div>
+      </div>
+
+      <!-- Main Airport FIDS Layout Grid -->
+      <div class="fids-layout-grid">
+        
+        <!-- Left Main Electronic Flight Board (70%) -->
+        <div class="fids-board-wrapper">
+          <div class="fids-board-title-bar">
+            <span class="board-dot red"></span>
+            <span class="board-dot yellow"></span>
+            <span class="board-dot green"></span>
+            <span class="board-title-text">JAIPUR (JAI) — LIVE FLIGHT DEPARTURES & ARRIVALS</span>
+          </div>
+
+          <!-- Main FIDS Flight Rows Container -->
+          <div class="fids-table-container" id="fidsTableContainer">
+            <!-- Dynamically populated by FIDSDisplay.js -->
+          </div>
+
+          <!-- Bottom Shift Register Announcement Ticker -->
+          <div class="announcement-ticker-bar">
+            <div class="ticker-label">SHIFT REG ANNOUNCEMENT:</div>
+            <div class="ticker-canvas-wrapper">
+              <canvas id="marqueeCanvas" width="800" height="24"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Information Sidebar (30%) -->
+        <div class="fids-sidebar">
+          
+          <!-- Next Departure Live Countdown Panel -->
+          <div class="sidebar-widget" id="nextDepartureContainer">
+            <!-- Dynamically populated by FIDSDisplay.js -->
+          </div>
+
+          <!-- Selected Flight Details Panel -->
+          <div class="sidebar-widget" id="flightDetailsContainer">
+            <!-- Dynamically populated by FIDSDisplay.js -->
+          </div>
+
+          <!-- Airport Terminal & Statistics Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-title">TERMINAL INFORMATION</div>
+            <div class="terminal-info-grid">
+              <div class="term-box">
+                <div class="term-code">TERMINAL 1</div>
+                <div class="term-type">DOMESTIC</div>
+              </div>
+              <div class="term-box">
+                <div class="term-code">TERMINAL 2</div>
+                <div class="term-type">INTERNATIONAL</div>
+              </div>
+            </div>
+
+            <div class="stats-grid" id="statsContainer">
+              <!-- Dynamically populated by FIDSDisplay.js -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tab 2: Interactive DLD Logic Schematic -->
+    <div id="tab-schematic" class="fids-tab-content">
+      <div class="fids-card">
+        <div class="card-title-bar">
+          <span>🔧 AIRPORT FIDS DLD LOGIC SCHEMATIC</span>
+          <span class="card-subtitle">MASTER CLOCK ➔ COUNTER ➔ DECODER ➔ MUX ➔ SHIFT REGISTER ➔ FIDS DISPLAY</span>
+        </div>
+        <div class="canvas-box">
+          <canvas id="schematicCanvas" width="1150" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Real-Time Digital Signal Monitor -->
+    <div id="tab-scope" class="fids-tab-content">
+      <div class="fids-card">
+        <div class="card-title-bar">
+          <span>📊 REAL-TIME DIGITAL SIGNAL MONITOR</span>
+          <span class="card-subtitle">Real-time logic signals responding to Start, Stop, Reset, and Mode selection</span>
+        </div>
+        <div class="canvas-box">
+          <canvas id="scopeCanvas" width="1150" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: DLD Control Panel -->
+    <div id="tab-controls" class="fids-tab-content">
+      <div class="fids-card">
+        <div class="card-title-bar">
+          <span>⚙️ DLD HARDWARE CONTROL PANEL</span>
+          <span class="card-subtitle">Direct logic register manipulation and simulation controls</span>
+        </div>
+
+        <div class="control-panel-grid">
+          
+          <!-- Master Operations -->
+          <div class="ctrl-group">
+            <h3>Master Controls (SR Latch / D-FF)</h3>
+            <div class="ctrl-btn-row">
+              <button class="btn-ctrl btn-start" id="btnStart">▶ START</button>
+              <button class="btn-ctrl btn-stop" id="btnStop">⏸ STOP</button>
+              <button class="btn-ctrl btn-reset" id="btnReset">🔄 RESET</button>
+            </div>
+          </div>
+
+          <!-- MUX Mode Switches -->
+          <div class="ctrl-group">
+            <h3>74LS151 MUX Mode Select (M2, M1, M0)</h3>
+            <div class="ctrl-mode-grid">
+              <button class="mode-btn active" data-mode="0">MODE 0: ALL FLIGHTS (000)</button>
+              <button class="mode-btn" data-mode="1">MODE 1: ARRIVALS (001)</button>
+              <button class="mode-btn" data-mode="2">MODE 2: DEPARTURES (010)</button>
+              <button class="mode-btn" data-mode="3">MODE 3: BOARDING (011)</button>
+              <button class="mode-btn" data-mode="4">MODE 4: DELAYED (100)</button>
+            </div>
+          </div>
+
+          <!-- Live Internal Logic Registers Inspector -->
+          <div class="ctrl-group wide">
+            <h3>Internal DLD Registers State Inspector</h3>
+            <div class="register-grid">
+              <div class="reg-box">
+                <div class="reg-lbl">CLOCK STATE (555)</div>
+                <div class="reg-val" id="regClockState">100 Hz ACTIVE</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">COUNTER VALUE (74LS90)</div>
+                <div class="reg-val" id="regCounterVal">0512 s</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">MUX SELECT (74LS151)</div>
+                <div class="reg-val highlight" id="regMuxSelect">000</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">DECODER OUTPUT (74LS138)</div>
+                <div class="reg-val" id="regDecoderOut">11111110</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">SHIFT REG BYTE (74HC595)</div>
+                <div class="reg-val" id="regShiftByte">0x7E</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">FSM STATE</div>
+                <div class="reg-val highlight-green" id="regFsmState">ALL_FLIGHTS</div>
+              </div>
+              <div class="reg-box">
+                <div class="reg-lbl">DISPLAY ENABLE (Q)</div>
+                <div class="reg-val" id="regDisplayEn">1 (HIGH)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls Settings -->
+          <div class="ctrl-group">
+            <h3>Simulation Parameters</h3>
+            <div class="setting-item">
+              <label>Clock Speed: <span id="speedValText">60 Hz</span></label>
+              <input type="range" id="speedSlider" min="20" max="120" value="60">
+            </div>
+            <button class="btn-ctrl btn-start" id="btnNextAnnounce" style="margin-top: 12px; width: 100%;">
+              📢 Next Announcement (Shift Register)
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="fids-footer">
+    JAIPUR INTERNATIONAL AIRPORT (JAI) — SMART DIGITAL AIRPORT FLIGHT INFORMATION DISPLAY SYSTEM (SMART FIDS)
+  </footer>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
